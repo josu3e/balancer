@@ -1,0 +1,21 @@
+version: '2'
+services:
+  lb:
+    container_name: $CONTAINER_NAME
+    image: dockercloud/haproxy:1.6.3
+    environment:
+      STATS_AUTH: "$AUTH_USER:$AUTH_PASS"
+      STATS_PORT: '1936'
+      MONITOR_PORT: '80'
+      MONITOR_URI: '/status'
+      ADDITIONAL_SERVICES: $PROJECT_SERVICES
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    ports:
+      - 80:80
+      - 1936:1936
+
+networks:
+  default:
+    external:
+      name: $DOCKER_NETWORK
